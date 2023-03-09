@@ -20,6 +20,9 @@ import com.keval.SpringSecurity.service.UserDetailService;
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Autowired
+	private JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
+	
+	@Autowired
 	private JwtAuthenticationFilter jwtAuthenticationFilter;
 	
 	@Autowired
@@ -39,7 +42,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 			.antMatchers("/token").permitAll()
 			.anyRequest().authenticated()
 			.and()
-			.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+			.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+			.and()
+			.exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint);
 		http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 	}
 	public PasswordEncoder passwordEncoder() {
